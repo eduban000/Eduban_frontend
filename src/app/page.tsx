@@ -1,5 +1,8 @@
 import type { Metadata } from 'next';
 import Hero from '@/components/landing/Hero';
+import HowItWorks from '@/components/landing/HowItWorks';
+import Features from '@/components/landing/Features';
+import SocialProof from '@/components/landing/SocialProof';
 
 export const metadata: Metadata = {
   title: 'Eduban — On-chain credentials for decentralized learning',
@@ -17,6 +20,9 @@ export default function HomePage() {
   return (
     <>
       <Hero />
+      <HowItWorks />
+      <Features />
+      <SocialProof />
     </>
   );
 }
