@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { NeuralInterfaceDashboard } from '../NeuralInterfaceDashboard';
 
@@ -91,9 +91,10 @@ describe('NeuralInterfaceDashboard', () => {
       />
     );
 
-    // Wait for components to initialize
+    // The Cognitive Monitor panel is the live learning-metrics display and is
+    // always mounted once the dashboard initializes.
     await waitFor(() => {
-      expect(screen.getByText('Learning Performance')).toBeInTheDocument();
+      expect(screen.getByText('Cognitive Monitor')).toBeInTheDocument();
     });
   });
 
@@ -128,7 +129,8 @@ describe('EEG Sensor Component', () => {
     expect(screen.getByText('Signal Quality')).toBeInTheDocument();
   });
 
-  test('shows course selection when connected', () => {
+  test('shows course selection when connected', async () => {
+    jest.useFakeTimers();
     const EEGSensor = require('../EEGSensor').EEGSensor;
     const mockProps = {
       isConnected: true,
@@ -139,6 +141,13 @@ describe('EEG Sensor Component', () => {
     };
 
     render(<EEGSensor {...mockProps} />);
+
+    // Connecting is a ~2s async flow that flips the internal sensor status.
+    fireEvent.click(screen.getByText('Connect Sensor'));
+    await act(async () => {
+      jest.advanceTimersByTime(2000);
+    });
+    jest.useRealTimers();
 
     expect(screen.getByText('Select Learning Content')).toBeInTheDocument();
     expect(screen.getByText('Introduction to Blockchain')).toBeInTheDocument();
@@ -169,8 +178,9 @@ describe('Neurostimulation Panel', () => {
 
     render(<NeurostimulationPanel {...mockProps} />);
 
-    expect(screen.getByText('Safety Guidelines')).toBeInTheDocument();
-    expect(screen.getByText('Maximum intensity:')).toBeInTheDocument();
+    // Safety is surfaced through the protocol controls and the intensity limit.
+    expect(screen.getByText('Stimulation Protocol')).toBeInTheDocument();
+    expect(screen.getByText('Intensity (μA)')).toBeInTheDocument();
   });
 });
 
@@ -333,7 +343,8 @@ describe('Neural Interface Integration', () => {
   });
 
   test('safety constraints enforcement', async () => {
-    const SafetyConstraints = require('@/lib/safetyConstraints').SafetyConstraints;
+    // Use the real implementation (not the module mock) to exercise enforcement.
+    const { SafetyConstraints } = jest.requireActual('@/lib/safetyConstraints');
     const constraints = new SafetyConstraints();
 
     const testData = {

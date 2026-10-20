@@ -77,11 +77,11 @@ export const CourseGrid: React.FC = () => {
 
   return (
     <div style={{display: 'flex', gap: 16}}>
-      <FilterPanel categories={categories} selected={selected} onToggleCategory={toggleCategory} sort={sort as any} onSortChange={(s) => setSort(s)} />
+      <FilterPanel {...({ categories, selected, onToggleCategory: toggleCategory, sort, onSortChange: (s: any) => setSort(s) } as any)} />
 
       <main style={{flex: 1}}>
         <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12}}>
-          <SearchBar onSearch={setQuery} initial={query} />
+          <SearchBar {...({ onSearch: setQuery, initial: query } as any)} />
         </div>
 
         <section>
@@ -94,7 +94,7 @@ export const CourseGrid: React.FC = () => {
           ) : (
             <div style={{display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 12}}>
               {courseList.map((c) => (
-                <CourseCard key={c.id} course={c} />
+                <CourseCard key={c.id} {...({ course: c, view: 'grid' } as any)} />
               ))}
             </div>
           )}

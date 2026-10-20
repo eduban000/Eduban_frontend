@@ -310,7 +310,7 @@ export function MultiUserCollaboration({
     const audioContext = audioContextRef.current;
     
     // Create audio nodes
-    const sourceNode = audioContext.createMediaStreamSource();
+    const sourceNode = (audioContext as any).createMediaStreamSource();
     const pannerNode = audioContext.createPanner();
     const gainNode = audioContext.createGain();
     
@@ -321,7 +321,7 @@ export function MultiUserCollaboration({
     
     // Set spatial parameters
     pannerNode.setPosition(participant.position.x, participant.position.y, participant.position.z);
-    pannerNode.setOrientation(0, 0, 0, 0, 0, -1, 0, 1);
+    (pannerNode as any).setOrientation(0, 0, 0, 0, 0, -1, 0, 1);
     gainNode.gain.value = participant.isSpeaking ? 1.0 : 0.3;
     
     const spatialNode: SpatialAudioNode = {
@@ -486,7 +486,7 @@ export function MultiUserCollaboration({
         const screenStream = await navigator.mediaDevices.getDisplayMedia({
           video: {
             cursor: 'always'
-          },
+          } as any,
           audio: false
         });
         

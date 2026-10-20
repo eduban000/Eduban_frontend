@@ -43,14 +43,14 @@ const StakingDashboard = () => {
            <div style={{ marginTop: '1.5rem', display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
              {Object.keys(apyOptions).map(opt => (
                 <button key={opt} className="glass-card" style={{ flex: '1 1 50px', border: lockDuration === opt ? '1px solid var(--primary-accent)' : 'none' }} onClick={() => setLockDuration(opt)}>
-                  {opt}<br/><span style={{ fontSize: '0.7rem', color: '#00ff88' }}>{apyOptions[opt]} APY</span>
+                  {opt}<br/><span style={{ fontSize: '0.7rem', color: '#00ff88' }}>{apyOptions[opt as keyof typeof apyOptions]} APY</span>
                 </button>
              ))}
            </div>
 
            <div style={{ marginTop: '2rem', padding: '1rem', background: '#000', borderRadius: '1rem', border: '1px solid #333' }}>
               <p className="text-dim" style={{ fontSize: '0.8rem' }}>Estimated Yearly Reward</p>
-              <h2 style={{ margin: 0 }}>{(stakeAmount * (parseFloat(apyOptions[lockDuration]) / 100)).toFixed(2)} STARK</h2>
+              <h2 style={{ margin: 0 }}>{(stakeAmount * (parseFloat(apyOptions[lockDuration as keyof typeof apyOptions]) / 100)).toFixed(2)} STARK</h2>
            </div>
 
            <button className="btn-premium" style={{ width: '100%', marginTop: '1.5rem' }}>Start Staking Action</button>

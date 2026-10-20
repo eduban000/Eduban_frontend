@@ -6,6 +6,8 @@ import { performanceMonitor } from '@/lib/performance-monitor';
 import { GlobalShell } from '@/components/PWA/GlobalShell';
 import { CommandPalette } from '@/components/ui/command-palette';
 import { Footer } from '@/components/Footer';
+import SiteHeader from '@/components/layout/SiteHeader';
+import { WalletProvider } from '@/contexts/WalletContext';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -50,11 +52,14 @@ export default function RootLayout({
           storageKey="eduban-theme"
           disableTransitionOnChange={false}
         >
-          <GlobalShell />
-          <div className="flex flex-col min-h-screen">
-            <main className="flex-grow">{children}</main>
-            <Footer />
-          </div>
+          <WalletProvider>
+            <GlobalShell />
+            <div className="flex flex-col min-h-screen">
+              <SiteHeader />
+              <main id="main-content" className="flex-grow">{children}</main>
+              <Footer />
+            </div>
+          </WalletProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -24,7 +24,7 @@ export interface BrainSignal {
 }
 
 export class BCIService {
-  private board: BoardShim | null = null;
+  private board: any = null;
   private isConnected = false;
   private model: tf.LayersModel | null = null;
   private signalBuffer: BrainSignal[] = [];
@@ -102,7 +102,7 @@ export class BCIService {
 
   async connectDevice(deviceId: string): Promise<boolean> {
     try {
-      const params: BrainFlowInputParams = {
+      const params: any = {
         serial_port: '',
         mac_address: '',
         other_info: '',
@@ -323,6 +323,7 @@ export class BCIService {
     const recentStates = this.cognitiveHistory.slice(-5);
     const avgAttention = recentStates.reduce((sum, state) => sum + state.attention, 0) / recentStates.length;
     const avgEngagement = recentStates.reduce((sum, state) => sum + state.engagement, 0) / recentStates.length;
+    const avgCognitiveLoad = recentStates.reduce((sum, state) => sum + state.cognitiveLoad, 0) / recentStates.length;
 
     if (avgAttention > 0.8 && avgEngagement > 0.7) {
       return 'focus';

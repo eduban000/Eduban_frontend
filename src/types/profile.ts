@@ -26,6 +26,7 @@ export interface Achievement {
   category: string;
   progress?: number;
   maxProgress?: number;
+  points?: number;
 }
 
 export interface Credential {

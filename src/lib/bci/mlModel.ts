@@ -126,7 +126,7 @@ export class MLModel {
 
       const [attention, relaxation, engagement, cognitiveLoad] = values;
 
-      const confidence = this.calculateConfidence(values);
+      const confidence = this.calculateConfidence(values as Float32Array);
 
       return {
         attention: Math.max(0, Math.min(1, attention)),

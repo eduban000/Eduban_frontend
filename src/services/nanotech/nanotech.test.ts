@@ -9,7 +9,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 // Utility Tests
 describe('Neural Simulation Utilities', () => {
   it('should generate valid neural patterns', async () => {
-    const { generateNeuralPattern } = await import('../utils/neuralSimulation');
+    const { generateNeuralPattern } = await import('../../utils/neuralSimulation');
     const pattern = generateNeuralPattern('user1', 75, 'visual');
     
     expect(pattern).toHaveProperty('id');
@@ -20,7 +20,7 @@ describe('Neural Simulation Utilities', () => {
   });
 
   it('should evolve neural patterns correctly', async () => {
-    const { generateNeuralPattern, evolveNeuralPattern } = await import('../utils/neuralSimulation');
+    const { generateNeuralPattern, evolveNeuralPattern } = await import('../../utils/neuralSimulation');
     const initial = generateNeuralPattern('user1', 50, 'cognitive');
     const evolved = evolveNeuralPattern(initial, 60000, 3, 0.8);
     
@@ -29,7 +29,7 @@ describe('Neural Simulation Utilities', () => {
   });
 
   it('should calculate pattern similarity correctly', async () => {
-    const { generateNeuralPattern, calculatePatternSimilarity } = await import('../utils/neuralSimulation');
+    const { generateNeuralPattern, calculatePatternSimilarity } = await import('../../utils/neuralSimulation');
     const pattern1 = generateNeuralPattern('user1', 75, 'general');
     const pattern2 = generateNeuralPattern('user1', 75, 'general');
     
@@ -39,7 +39,7 @@ describe('Neural Simulation Utilities', () => {
   });
 
   it('should detect learning states', async () => {
-    const { generateNeuralPattern, detectLearningState } = await import('../utils/neuralSimulation');
+    const { generateNeuralPattern, detectLearningState } = await import('../../utils/neuralSimulation');
     const pattern = generateNeuralPattern('user1', 85, 'problem-solving');
     
     const state = detectLearningState(pattern);
@@ -49,7 +49,7 @@ describe('Neural Simulation Utilities', () => {
 
 describe('Knowledge Encoding Utilities', () => {
   it('should encode skills with compression', async () => {
-    const { encodeSkill } = await import('../utils/knowledgeEncoding');
+    const { encodeSkill } = await import('../../utils/knowledgeEncoding');
     const skill = {
       id: 'skill_test',
       name: 'Test Skill',
@@ -70,7 +70,7 @@ describe('Knowledge Encoding Utilities', () => {
   });
 
   it('should fragment knowledge for transmission', async () => {
-    const { encodeSkill, fragmentKnowledge } = await import('../utils/knowledgeEncoding');
+    const { encodeSkill, fragmentKnowledge } = await import('../../utils/knowledgeEncoding');
     const skill = {
       id: 'skill_test',
       name: 'Test Skill',
@@ -93,7 +93,7 @@ describe('Knowledge Encoding Utilities', () => {
   });
 
   it('should verify encoded knowledge', async () => {
-    const { encodeSkill, verifyEncodedKnowledge } = await import('../utils/knowledgeEncoding');
+    const { encodeSkill, verifyEncodedKnowledge } = await import('../../utils/knowledgeEncoding');
     const skill = {
       id: 'skill_test',
       name: 'Test Skill',
@@ -116,7 +116,7 @@ describe('Knowledge Encoding Utilities', () => {
 // Service Tests
 describe('Neural Interface Service', () => {
   it('should initialize and start monitoring', async () => {
-    const { getNeuralInterfaceService, resetNeuralInterfaceService } = await import('../services/nanotech/neuralInterface');
+    const { getNeuralInterfaceService, resetNeuralInterfaceService } = await import('./neuralInterface');
     resetNeuralInterfaceService();
     
     const service = getNeuralInterfaceService('user1');
@@ -130,7 +130,7 @@ describe('Neural Interface Service', () => {
   });
 
   it('should map neural pathways', async () => {
-    const { getNeuralInterfaceService, resetNeuralInterfaceService } = await import('../services/nanotech/neuralInterface');
+    const { getNeuralInterfaceService, resetNeuralInterfaceService } = await import('./neuralInterface');
     resetNeuralInterfaceService();
     
     const service = getNeuralInterfaceService('user1');
@@ -147,7 +147,7 @@ describe('Neural Interface Service', () => {
 
 describe('Nanobot Controller Service', () => {
   it('should deploy swarms', async () => {
-    const { getNanobotControllerService, resetNanobotControllerService } = await import('../services/nanotech/nanobotController');
+    const { getNanobotControllerService, resetNanobotControllerService } = await import('./nanobotController');
     resetNanobotControllerService();
     
     const service = getNanobotControllerService();
@@ -159,7 +159,7 @@ describe('Nanobot Controller Service', () => {
   });
 
   it('should get swarm statistics', async () => {
-    const { getNanobotControllerService, resetNanobotControllerService } = await import('../services/nanotech/nanobotController');
+    const { getNanobotControllerService, resetNanobotControllerService } = await import('./nanobotController');
     resetNanobotControllerService();
     
     const service = getNanobotControllerService();
@@ -173,7 +173,7 @@ describe('Nanobot Controller Service', () => {
 
 describe('Skill Tracker Service', () => {
   it('should track skill acquisition', async () => {
-    const { getSkillTrackerService, resetSkillTrackerService } = await import('../services/nanotech/skillTracker');
+    const { getSkillTrackerService, resetSkillTrackerService } = await import('./skillTracker');
     resetSkillTrackerService();
     
     const service = getSkillTrackerService('user1');
@@ -195,7 +195,7 @@ describe('Skill Tracker Service', () => {
   });
 
   it('should update skill progress', async () => {
-    const { getSkillTrackerService, resetSkillTrackerService } = await import('../services/nanotech/skillTracker');
+    const { getSkillTrackerService, resetSkillTrackerService } = await import('./skillTracker');
     resetSkillTrackerService();
     
     const service = getSkillTrackerService('user1');
@@ -219,7 +219,7 @@ describe('Skill Tracker Service', () => {
   });
 
   it('should record test results', async () => {
-    const { getSkillTrackerService, resetSkillTrackerService } = await import('../services/nanotech/skillTracker');
+    const { getSkillTrackerService, resetSkillTrackerService } = await import('./skillTracker');
     resetSkillTrackerService();
     
     const service = getSkillTrackerService('user1');
@@ -246,7 +246,7 @@ describe('Skill Tracker Service', () => {
 
 describe('Safety Monitor Service', () => {
   it('should initialize safety monitoring', async () => {
-    const { getSafetyMonitorService, resetSafetyMonitorService } = await import('../services/nanotech/safetyMonitor');
+    const { getSafetyMonitorService, resetSafetyMonitorService } = await import('./safetyMonitor');
     resetSafetyMonitorService();
     
     const service = getSafetyMonitorService();
@@ -275,11 +275,11 @@ describe('Safety Monitor Service', () => {
 
 describe('Learning Profile Service', () => {
   it('should create learning profiles', async () => {
-    const { getLearningProfileService, resetLearningProfileService } = await import('../services/nanotech/learningProfile');
+    const { getLearningProfileService, resetLearningProfileService } = await import('./learningProfile');
     resetLearningProfileService();
     
     const service = getLearningProfileService();
-    const { generateNeuralPattern } = await import('../utils/neuralSimulation');
+    const { generateNeuralPattern } = await import('../../utils/neuralSimulation');
     const pattern = generateNeuralPattern('user1', 75, 'visual');
     
     const profile = service.createProfile('user1', pattern);
@@ -288,7 +288,7 @@ describe('Learning Profile Service', () => {
   });
 
   it('should estimate mastery time', async () => {
-    const { getLearningProfileService, resetLearningProfileService } = await import('../services/nanotech/learningProfile');
+    const { getLearningProfileService, resetLearningProfileService } = await import('./learningProfile');
     resetLearningProfileService();
     
     const service = getLearningProfileService();
@@ -316,9 +316,9 @@ describe('Learning Profile Service', () => {
 // Integration Tests
 describe('Nanotechnology Learning System - Integration', () => {
   it('should complete a full learning session flow', async () => {
-    const { getLearningProtocolService, resetLearningProtocolService } = await import('../services/nanotech/learningProtocol');
-    const { getNeuralInterfaceService, resetNeuralInterfaceService } = await import('../services/nanotech/neuralInterface');
-    const { getSkillTrackerService, resetSkillTrackerService } = await import('../services/nanotech/skillTracker');
+    const { getLearningProtocolService, resetLearningProtocolService } = await import('./learningProtocol');
+    const { getNeuralInterfaceService, resetNeuralInterfaceService } = await import('./neuralInterface');
+    const { getSkillTrackerService, resetSkillTrackerService } = await import('./skillTracker');
     
     resetLearningProtocolService();
     resetNeuralInterfaceService();
@@ -345,7 +345,7 @@ describe('Nanotechnology Learning System - Integration', () => {
   });
 
   it('should handle knowledge encoding throughout session', async () => {
-    const { getKnowledgeEncoderService, resetKnowledgeEncoderService } = await import('../services/nanotech/knowledgeEncoder');
+    const { getKnowledgeEncoderService, resetKnowledgeEncoderService } = await import('./knowledgeEncoder');
     resetKnowledgeEncoderService();
     
     const encoder = getKnowledgeEncoderService();
@@ -362,7 +362,7 @@ describe('Nanotechnology Learning System - Integration', () => {
     };
     
     const encoded = await encoder.encodeSkillForTransfer(skill);
-    expect(encoded).toHavePropery('id');
+    expect(encoded).toHaveProperty('id');
     
     const fragments = await encoder.fragmentEncodedKnowledge(skill.id);
     expect(Array.isArray(fragments)).toBe(true);
@@ -384,7 +384,7 @@ describe('Nanotechnology Learning System - Type Safety', () => {
 // Performance Tests
 describe('Nanotechnology Learning System - Performance', () => {
   it('should handle large swarm sizes efficiently', async () => {
-    const { getNanobotControllerService, resetNanobotControllerService } = await import('../services/nanotech/nanobotController');
+    const { getNanobotControllerService, resetNanobotControllerService } = await import('./nanobotController');
     resetNanobotControllerService();
     
     const service = getNanobotControllerService();
@@ -400,7 +400,7 @@ describe('Nanotechnology Learning System - Performance', () => {
   });
 
   it('should process multiple sessions in parallel', async () => {
-    const { getSkillTrackerService, resetSkillTrackerService } = await import('../services/nanotech/skillTracker');
+    const { getSkillTrackerService, resetSkillTrackerService } = await import('./skillTracker');
     resetSkillTrackerService();
     
     const service = getSkillTrackerService('user1');

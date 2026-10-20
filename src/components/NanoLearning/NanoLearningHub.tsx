@@ -35,7 +35,7 @@ export function NanoLearningHub({
   // Auto-start monitoring when skill is selected
   useEffect(() => {
     if (sessionActive && skillAcq.swarmStatus) {
-      safety.startMonitoring(skillAcq.swarmStatus.id);
+      (safety.startMonitoring as any)(skillAcq.swarmStatus.id);
     }
 
     return () => {
@@ -59,7 +59,7 @@ export function NanoLearningHub({
       // Start neural monitoring
       const skillCategory =
         selectedSkill.category === 'technical' ? 'problem-solving' : selectedSkill.category;
-      await neural.startMonitoring(skillCategory);
+      await (neural.startMonitoring as any)(skillCategory);
     } catch (error) {
       console.error('Failed to start session:', error);
       setSessionActive(false);

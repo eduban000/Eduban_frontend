@@ -2,6 +2,9 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { ChatAssistant } from '@/components/Chat/ChatAssistant';
 import { useChatStore } from '@/store/chatStore';
 import { useCourseStore } from '@/store/courseStore';
+import { useWebSocket } from '@/hooks/useWebSocket';
+import { useSpeechRecognition } from '@/hooks/useSpeechRecognition';
+import { useTextToSpeech } from '@/hooks/useTextToSpeech';
 
 // Mock the stores
 jest.mock('@/store/chatStore');
@@ -12,12 +15,37 @@ jest.mock('@/hooks/useTextToSpeech');
 
 const mockChatStore = useChatStore as jest.MockedFunction<typeof useChatStore>;
 const mockCourseStore = useCourseStore as jest.MockedFunction<typeof useCourseStore>;
+const mockUseWebSocket = useWebSocket as jest.MockedFunction<typeof useWebSocket>;
+const mockUseSpeechRecognition = useSpeechRecognition as jest.MockedFunction<typeof useSpeechRecognition>;
+const mockUseTextToSpeech = useTextToSpeech as jest.MockedFunction<typeof useTextToSpeech>;
+
+const defaultSpeechRecognition = {
+  isListening: false,
+  transcript: '',
+  startListening: jest.fn(),
+  stopListening: jest.fn(),
+  supported: true,
+};
 
 describe('ChatAssistant', () => {
   beforeEach(() => {
     // Reset mocks
     jest.clearAllMocks();
-    
+
+    // Default hook implementations (components destructure these on render)
+    mockUseWebSocket.mockReturnValue({
+      sendMessage: jest.fn(),
+      isConnected: true,
+      connectionStatus: 'connected',
+    } as any);
+    mockUseSpeechRecognition.mockReturnValue({ ...defaultSpeechRecognition } as any);
+    mockUseTextToSpeech.mockReturnValue({
+      speak: jest.fn(),
+      speaking: false,
+      cancel: jest.fn(),
+      supported: true,
+    } as any);
+
     // Mock store implementations
     mockChatStore.mockReturnValue({
       addMessage: jest.fn(),
@@ -104,52 +132,56 @@ describe('ChatAssistant', () => {
       content: 'Hello, AI!',
       type: 'user',
       timestamp: expect.any(Date),
-      attachments: undefined
+      attachments: []
     });
   });
 
-  it('shows typing indicator when AI is responding', () => {
-    mockChatStore.mockReturnValue({
-      ...mockChatStore(),
-      isTyping: true
+  it('shows typing indicator when AI is responding', async () => {
+    // A send that never resolves keeps the component in its "typing" state.
+    mockUseWebSocket.mockReturnValue({
+      sendMessage: jest.fn(() => new Promise(() => {})),
+      isConnected: true,
+      connectionStatus: 'connected',
     } as any);
 
     render(<ChatAssistant />);
-    
-    // Should show typing indicator
-    expect(document.querySelector('.animate-pulse')).toBeInTheDocument();
+
+    const input = screen.getByPlaceholderText('Ask me anything about your course...');
+    fireEvent.change(input, { target: { value: 'Hello, AI!' } });
+    fireEvent.click(screen.getByTitle('Send message'));
+
+    // TypingIndicator renders with an animate-pulse wrapper.
+    await waitFor(() => {
+      expect(document.querySelector('.animate-pulse')).toBeInTheDocument();
+    });
   });
 
   it('handles voice input when supported', () => {
     const mockStartListening = jest.fn();
-    
-    jest.doMock('@/hooks/useSpeechRecognition', () => ({
-      useSpeechRecognition: () => ({
-        isListening: false,
-        transcript: '',
-        startListening: mockStartListening,
-        stopListening: jest.fn(),
-        supported: true
-      })
-    }));
+
+    mockUseSpeechRecognition.mockReturnValue({
+      isListening: false,
+      transcript: '',
+      startListening: mockStartListening,
+      stopListening: jest.fn(),
+      supported: true,
+    } as any);
 
     render(<ChatAssistant />);
-    
-    const voiceButton = screen.getByTitle('Start voice input');
+
+    // Both the header and the input render a voice button; the header's toggles listening.
+    const voiceButton = screen.getAllByTitle('Start voice input')[0];
     fireEvent.click(voiceButton);
-    
+
     expect(mockStartListening).toHaveBeenCalled();
   });
 
   it('displays error message when WebSocket is disconnected', () => {
-    jest.doMock('@/hooks/useWebSocket', () => ({
-      useWebSocket: () => ({
-        sendMessage: jest.fn(),
-        isConnected: false,
-        connectionStatus: 'disconnected',
-        socket: null
-      })
-    }));
+    mockUseWebSocket.mockReturnValue({
+      sendMessage: jest.fn(),
+      isConnected: false,
+      connectionStatus: 'disconnected',
+    } as any);
 
     render(<ChatAssistant />);
     
@@ -166,10 +198,10 @@ describe('ChatAssistant', () => {
     render(<ChatAssistant />);
     
     const input = screen.getByPlaceholderText('Ask me anything about your course...');
-    
+
     fireEvent.change(input, { target: { value: 'Test message' } });
-    fireEvent.keyPress(input, { key: 'Enter' });
-    
+    fireEvent.keyPress(input, { key: 'Enter', code: 'Enter', charCode: 13, keyCode: 13 });
+
     expect(mockAddMessage).toHaveBeenCalled();
   });
 
@@ -184,18 +216,14 @@ describe('ChatAssistant', () => {
   });
 
   it('handles file attachments', async () => {
-    render(<ChatAssistant />);
-    
-    const fileInput = screen.getByTitle('Attach file');
+    const { container } = render(<ChatAssistant />);
+
+    // The visible "Attach file" control proxies to a hidden <input type="file">.
+    const fileInput = container.querySelector('input[type="file"]') as HTMLInputElement;
     const file = new File(['test'], 'test.txt', { type: 'text/plain' });
-    
-    // Simulate file selection
-    Object.defineProperty(fileInput, 'files', {
-      value: [file]
-    });
-    
-    fireEvent.change(fileInput);
-    
+
+    fireEvent.change(fileInput, { target: { files: [file] } });
+
     await waitFor(() => {
       expect(screen.getByText('test.txt')).toBeInTheDocument();
     });

@@ -177,7 +177,7 @@ const CollaborationRoom: React.FC<CollaborationRoomProps> = ({
       const stream = await navigator.mediaDevices.getDisplayMedia({
         video: {
           cursor: 'always'
-        },
+        } as any,
         audio: false
       });
 

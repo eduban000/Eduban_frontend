@@ -38,6 +38,7 @@ jest.mock('framer-motion', () => {
     AnimatePresence: ({ children }: { children: React.ReactNode }) =>
       React.createElement(React.Fragment, null, children),
     motion: {
+      // eslint-disable-next-line react/display-name
       div: React.forwardRef(
         (
           { children, ...props }: React.HTMLAttributes<HTMLDivElement>,

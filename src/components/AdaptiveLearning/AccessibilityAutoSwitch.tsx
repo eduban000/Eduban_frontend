@@ -355,7 +355,7 @@ export function AccessibilityAutoSwitch({
       }
 
       // Check for cognitive support needs
-      if (currentMetrics.scrollBehavior === 'scattered') {
+      if ((currentMetrics.scrollBehavior as string) === 'scattered') {
         detections.push({
           timestamp: new Date().toISOString(),
           trigger: 'focus-issues',

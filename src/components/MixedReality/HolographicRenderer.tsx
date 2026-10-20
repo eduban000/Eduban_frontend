@@ -126,7 +126,7 @@ export function HolographicRenderer({
     const initializeRenderer = async () => {
       try {
         // Initialize WebGL context with holographic extensions
-        const gl = canvasRef.current.getContext('webgl2', {
+        const gl = canvasRef.current!.getContext('webgl2', {
           antialias: true,
           alpha: true,
           premultipliedAlpha: false,
@@ -424,9 +424,9 @@ export function HolographicRenderer({
     gl.vertexAttribPointer(positionAttributeLocation, 3, gl.FLOAT, false, 0, 0);
 
     // Apply holographic material
-    gl.uniform3f(1, material.color); // color uniform
+    (gl as any).uniform3f(1, material.color); // color uniform
     gl.uniform1f(2, material.opacity); // opacity uniform
-    gl.uniform3f(3, material.emissive); // emissive uniform
+    (gl as any).uniform3f(3, material.emissive); // emissive uniform
 
     // Draw the geometry
     gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);

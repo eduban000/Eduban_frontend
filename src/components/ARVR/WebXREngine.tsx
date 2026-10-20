@@ -323,13 +323,13 @@ export function WebXREngine({
 
       // Check for VR support
       let vrSupported = false;
-      if (enableVR) {
+      if (enableVR && navigator.xr) {
         vrSupported = await navigator.xr.isSessionSupported('immersive-vr');
       }
 
       // Check for AR support
       let arSupported = false;
-      if (enableAR) {
+      if (enableAR && navigator.xr) {
         arSupported = await navigator.xr.isSessionSupported('immersive-ar');
       }
 
@@ -467,7 +467,7 @@ export function WebXREngine({
       const xrSessionMode = mode === 'vr' ? 'immersive-vr' as const : 'immersive-ar' as const;
 
       // Create session
-      const session = await navigator.xr.requestSession(xrSessionMode, {
+      const session = await navigator.xr!.requestSession(xrSessionMode, {
         requiredFeatures: ['local', 'input'],
         optionalFeatures: [
           'hand-tracking',
@@ -628,7 +628,7 @@ export function WebXREngine({
       drawCalls: 0, // Would be calculated from WebGL stats
       triangles: 0, // Would be calculated from geometry stats
       memoryUsage: 0, // Would be calculated from memory stats
-      trackingQuality: frame.trackingQuality || 'high'
+      trackingQuality: (frame as any).trackingQuality || 'high'
     };
 
     setPerformanceStats(stats);
@@ -681,7 +681,7 @@ export function WebXREngine({
     if (typeof window !== 'undefined' && !navigator.xr) {
       const session = currentSession;
       if (session) {
-        const endedSession = { ...session, state: 'ending' };
+        const endedSession = { ...session, state: 'ending' as const };
         setCurrentSession(endedSession);
         onSessionEnd?.(endedSession);
       }
@@ -699,7 +699,7 @@ export function WebXREngine({
       
       const session = currentSession;
       if (session) {
-        const endedSession = { ...session, state: 'ending' };
+        const endedSession = { ...session, state: 'ending' as const };
         setCurrentSession(endedSession);
         onSessionEnd?.(endedSession);
       }
@@ -764,9 +764,13 @@ export function WebXREngine({
             WebXR Not Supported
           </h3>
           <p className="text-gray-600 dark:text-gray-400">
-            Your browser or device doesn't support WebXR
+            Your browser or device doesn&apos;t support WebXR
           </p>
         </div>
+      </div>
+    );
+  }
+
   return (
     <div className="relative w-full h-full bg-black rounded-lg overflow-hidden min-h-[500px]">
       {/* Interactive 3D Globe / Simulator Fallback View */}

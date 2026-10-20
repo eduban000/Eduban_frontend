@@ -77,7 +77,7 @@ interface InteractionPatternOptimizerProps {
   learningStyle: LearningStyle;
   onPatternDetected?: (pattern: InteractionPattern) => void;
   onAdaptationApplied?: (adaptation: AdaptationRecord) => void;
-  onRecommendationGenerated?: (recommendation: InteractionRecommendation) => void;
+  onRecommendationGenerated?: (recommendations: InteractionRecommendation[]) => void;
   enableRealTimeOptimization?: boolean;
   optimizationSensitivity?: 'low' | 'medium' | 'high';
   trackPerformanceMetrics?: boolean;
@@ -254,20 +254,19 @@ export function InteractionPatternOptimizer({
     document.addEventListener('keydown', handleKeyDown);
 
     // Touch events for mobile
+    const handleTouchStart = (e: TouchEvent) => {
+      const touch = e.touches[0];
+      if (touch) {
+        trackInteraction({
+          type: 'gesture',
+          target: e.target,
+          clientX: touch.clientX,
+          clientY: touch.clientY,
+          timestamp: Date.now()
+        } as any);
+      }
+    };
     if ('ontouchstart' in window) {
-      const handleTouchStart = (e: TouchEvent) => {
-        const touch = e.touches[0];
-        if (touch) {
-          trackInteraction({
-            type: 'gesture',
-            target: e.target,
-            clientX: touch.clientX,
-            clientY: touch.clientY,
-            timestamp: Date.now()
-          } as any);
-        }
-      };
-
       document.addEventListener('touchstart', handleTouchStart);
     }
 
@@ -397,7 +396,7 @@ export function InteractionPatternOptimizer({
 
     setCurrentProfile({
       ...currentProfile,
-      dominantPatterns,
+      dominantPatterns: dominantPatterns as InteractionType[],
       adaptationHistory: newHistory,
       performanceMetrics: newMetrics
     });
