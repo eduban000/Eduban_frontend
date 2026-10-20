@@ -50,11 +50,25 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         title={shortcut ? `${props.title || ''} (${shortcut})`.trim() : props.title}
         {...props}
       >
-        {children}
-        {shortcut && (
-          <kbd className="ml-2 hidden sm:inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground bg-muted rounded">
-            {shortcut}
-          </kbd>
+        {/*
+         * When `asChild` is set, Comp is a Radix Slot which requires exactly one
+         * React element child. We must therefore pass `children` as the single
+         * child with no sibling expressions at all (even a falsy conditional or a
+         * JSX comment counts as an extra child and makes Slot throw "Slot failed
+         * to slot onto its children"). asChild callers own their own markup, so
+         * the shortcut <kbd> is only rendered in the normal button case.
+         */}
+        {asChild ? (
+          children
+        ) : (
+          <>
+            {children}
+            {shortcut && (
+              <kbd className="ml-2 hidden sm:inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground bg-muted rounded">
+                {shortcut}
+              </kbd>
+            )}
+          </>
         )}
       </Comp>
     )
