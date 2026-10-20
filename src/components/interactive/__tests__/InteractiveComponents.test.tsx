@@ -50,6 +50,12 @@ const mockCanvasContext = {
 
 HTMLCanvasElement.prototype.getContext = jest.fn(() => mockCanvasContext);
 
+// Canvas components drive recursive requestAnimationFrame loops. Under jsdom
+// these run unbounded and exhaust the heap, so stub rAF to a no-op for this
+// suite — the components still render, they just don't animate.
+global.requestAnimationFrame = jest.fn(() => 0) as any;
+global.cancelAnimationFrame = jest.fn() as any;
+
 describe('Interactive Learning Components', () => {
   describe('VirtualLabSimulation', () => {
     const mockProps = {

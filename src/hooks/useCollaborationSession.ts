@@ -470,7 +470,7 @@ export function useCollaborationSession() {
   const syncDocument = useCallback(async (payload: { documentId: string; title: string; userId: string; version: number; content: Record<string, unknown>; strategy?: string }) => {
     if (!workspace?.id) return;
 
-    const document = await requestJson(`/api/collaboration/workspaces/${workspace.id}/documents/${payload.documentId}/sync`, {
+    const document: any = await requestJson(`/api/collaboration/workspaces/${workspace.id}/documents/${payload.documentId}/sync`, {
       method: 'POST',
       headers: jsonHeaders,
       body: JSON.stringify(payload)
@@ -493,7 +493,7 @@ export function useCollaborationSession() {
   const addWorkspaceNote = useCallback(async (payload: { userId: string; userName: string; body: string }) => {
     if (!workspace?.id) return;
 
-    const note = await requestJson(`/api/collaboration/workspaces/${workspace.id}/notes`, {
+    const note: any = await requestJson(`/api/collaboration/workspaces/${workspace.id}/notes`, {
       method: 'POST',
       headers: jsonHeaders,
       body: JSON.stringify(payload)
@@ -505,7 +505,7 @@ export function useCollaborationSession() {
   const addDiscussionPost = useCallback(async (payload: { userId: string; authorName: string; body: string }) => {
     if (!workspace?.id) return;
 
-    const post = await requestJson(`/api/collaboration/workspaces/${workspace.id}/discussions`, {
+    const post: any = await requestJson(`/api/collaboration/workspaces/${workspace.id}/discussions`, {
       method: 'POST',
       headers: jsonHeaders,
       body: JSON.stringify(payload)

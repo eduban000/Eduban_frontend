@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Box, Play, Pause, RotateCw, Zap, Target, Wind, Magnet, Dumbbell } from 'lucide-react';
+import { Box, Play, Pause, RotateCw, Zap, Target, Wind, Magnet, Dumbbell, Settings } from 'lucide-react';
 
 export type PhysicsEngineType = 'cannon' | 'ammo' | 'custom' | 'rapier';
 export type ForceType = 'gravity' | 'magnetic' | 'electric' | 'wind' | 'spring' | 'friction';
@@ -512,7 +512,7 @@ export function PhysicsEngine({
       const restitution = Math.min(objA.material.restitution, objB.material.restitution);
       
       // Calculate impulse scalar
-      const impulseScalar = -(1 + restitution) * velocityAlongNormal;
+      let impulseScalar = -(1 + restitution) * velocityAlongNormal;
       impulseScalar /= (1 / objA.mass) + (1 / objB.mass);
       
       // Apply impulse

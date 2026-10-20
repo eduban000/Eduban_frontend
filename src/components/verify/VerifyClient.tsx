@@ -43,7 +43,7 @@ export default function VerifyClient() {
 
   // Auto-verify when arriving with ?id= (e.g. from the dashboard).
   useEffect(() => {
-    const queryId = searchParams.get('id');
+    const queryId = searchParams?.get('id');
     if (queryId) {
       setId(queryId);
       runVerify(queryId);

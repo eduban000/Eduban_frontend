@@ -82,11 +82,12 @@ const CATEGORY_CONFIG = {
 
 export function BadgeCollection({
   achievements,
-  showLocked = true,
+  showLocked: initialShowLocked = true,
   allowFiltering = true,
   viewMode = 'grid',
   compact = false
 }: BadgeCollectionProps) {
+  const [showLocked, setShowLocked] = useState<boolean>(initialShowLocked);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedRarity, setSelectedRarity] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');

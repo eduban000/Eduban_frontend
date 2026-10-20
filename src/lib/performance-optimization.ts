@@ -145,9 +145,10 @@ class PerformanceOptimizationService {
     }
 
     // Check for render-blocking scripts
-    const blockingScripts = Array.from(scripts).filter(script => 
-      !script.async && !script.defer && script.hasAttribute('src')
-    );
+    const blockingScripts = Array.from(scripts).filter(script => {
+      const s = script as HTMLScriptElement;
+      return !s.async && !s.defer && s.hasAttribute('src');
+    });
 
     if (blockingScripts.length > 0) {
       suggestions.push({
@@ -272,7 +273,7 @@ class PerformanceOptimizationService {
 
     return {
       totalSize: this.estimateTotalSize(resources),
-      requestCount: resources.length,        loadTime: navigation?.loadEventEnd - navigation?.activationStart || 0,        renderTime: navigation?.domContentLoadedEventEnd - navigation?.activationStart || 0,
+      requestCount: resources.length,        loadTime: (navigation?.loadEventEnd ?? 0) - (navigation?.activationStart ?? 0) || 0,        renderTime: (navigation?.domContentLoadedEventEnd ?? 0) - (navigation?.activationStart ?? 0) || 0,
     };
   }
 

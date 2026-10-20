@@ -335,9 +335,9 @@ export function SpatialAudioEngine({
     audioListener.forwardX.value = listener.orientation.x;
     audioListener.forwardY.value = listener.orientation.y;
     audioListener.forwardZ.value = listener.orientation.z;
-    (audioListener as any).upX.value = listener.upX;
-    (audioListener as any).upY.value = listener.upY;
-    (audioListener as any).upZ.value = listener.upZ;
+    (audioListener as any).upX.value = (listener as any).upX;
+    (audioListener as any).upY.value = (listener as any).upY;
+    (audioListener as any).upZ.value = (listener as any).upZ;
     
     // Set doppler factor
     (audioListener as any).dopplerFactor = listener.dopplerFactor;

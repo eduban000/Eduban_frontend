@@ -4,6 +4,7 @@ import ipfsClient, { IpfsUploadOptions, IpfsUploadResult, UploadProgress } from 
 import { validateFile as validateFileMeta } from '../lib/schemas';
 import { FileDropzone } from './ui/file-dropzone';
 import { FilePreview } from './ui/file-preview';
+import { useToastContext as useToast } from './ui/toast';
 
 interface ContentUploaderProps {
   onUploadComplete?: (result: IpfsUploadResult) => void;

@@ -262,7 +262,7 @@ const DragDropLearningActivity: React.FC<DragDropActivityProps> = ({
     <motion.div
       key={item.id}
       draggable
-      onDragStart={(e) => handleDragStart(e, item)}
+      onDragStart={(e) => handleDragStart(e as any, item)}
       onDragEnd={handleDragEnd}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}

@@ -110,3 +110,8 @@ global.performance = {
   measure: jest.fn(),
   now: jest.fn(() => Date.now()),
 }
+
+// jsdom does not implement scrollIntoView; stub it so components that call it on refs can render.
+if (typeof window !== 'undefined' && window.HTMLElement) {
+  window.HTMLElement.prototype.scrollIntoView = jest.fn()
+}

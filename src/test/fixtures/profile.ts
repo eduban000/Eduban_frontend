@@ -1,7 +1,7 @@
 // Test file to verify profile components work correctly
 // This file can be used to test the profile management system
 
-import { UserProfile, Achievement, Credential, ProfileStats } from './types/profile';
+import { UserProfile, Achievement, Credential, ProfileStats } from '../../types/profile';
 
 // Test data
 const testProfile: UserProfile = {

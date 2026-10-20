@@ -204,13 +204,13 @@ export function LearningStyleDetector({
     // Event listeners
     document.addEventListener('click', trackInteraction);
     document.addEventListener('dblclick', trackInteraction);
-    document.addEventListener('scroll', trackInteraction);
+    document.addEventListener('scroll', trackInteraction as EventListener);
     document.addEventListener('selectionchange', trackReading);
 
     return () => {
       document.removeEventListener('click', trackInteraction);
       document.removeEventListener('dblclick', trackInteraction);
-      document.removeEventListener('scroll', trackInteraction);
+      document.removeEventListener('scroll', trackInteraction as EventListener);
       document.removeEventListener('selectionchange', trackReading);
     };
   };
